@@ -3,13 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Поддержите разработчика бесплатных программ для Windows — AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber, Bambookee">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Codebdbd — Поддержать разработку">
+<meta property="og:description" content="Поддержите разработчика бесплатных программ для Windows — AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber, Bambookee">
+<meta property="og:image" content="img/suvorov.png">
+<meta property="og:url" content="https://suvorov.pp.ua/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📁</text></svg>">
 <title>Codebdbd — Поддержать разработку</title>
+<link rel="preload" href="fonts/JetBrainsMono-400_latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/JetBrainsMono-400_cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/VT323-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
   @font-face {
     font-family: 'JetBrains Mono';
     font-style: normal;
     font-weight: 400;
-    font-display: swap;
+    font-display: block;
     src: url('fonts/JetBrainsMono-400_latin.woff2') format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
   }
@@ -17,7 +28,7 @@
     font-family: 'JetBrains Mono';
     font-style: normal;
     font-weight: 400;
-    font-display: swap;
+    font-display: block;
     src: url('fonts/JetBrainsMono-400_cyrillic.woff2') format('woff2');
     unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
   }
@@ -25,7 +36,7 @@
     font-family: 'JetBrains Mono';
     font-style: normal;
     font-weight: 400;
-    font-display: swap;
+    font-display: block;
     src: url('fonts/JetBrainsMono-400_cyrillic-ext.woff2') format('woff2');
     unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
   }
@@ -33,7 +44,7 @@
     font-family: 'JetBrains Mono';
     font-style: normal;
     font-weight: 500;
-    font-display: swap;
+    font-display: block;
     src: url('fonts/JetBrainsMono-500_latin.woff2') format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
   }
@@ -41,7 +52,7 @@
     font-family: 'JetBrains Mono';
     font-style: normal;
     font-weight: 500;
-    font-display: swap;
+    font-display: block;
     src: url('fonts/JetBrainsMono-500_cyrillic.woff2') format('woff2');
     unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
   }
@@ -49,7 +60,7 @@
     font-family: 'JetBrains Mono';
     font-style: normal;
     font-weight: 500;
-    font-display: swap;
+    font-display: block;
     src: url('fonts/JetBrainsMono-500_cyrillic-ext.woff2') format('woff2');
     unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
   }
@@ -57,7 +68,7 @@
     font-family: 'JetBrains Mono';
     font-style: normal;
     font-weight: 700;
-    font-display: swap;
+    font-display: block;
     src: url('fonts/JetBrainsMono-700_latin.woff2') format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
   }
@@ -65,7 +76,7 @@
     font-family: 'JetBrains Mono';
     font-style: normal;
     font-weight: 700;
-    font-display: swap;
+    font-display: block;
     src: url('fonts/JetBrainsMono-700_cyrillic.woff2') format('woff2');
     unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
   }
@@ -73,7 +84,7 @@
     font-family: 'JetBrains Mono';
     font-style: normal;
     font-weight: 700;
-    font-display: swap;
+    font-display: block;
     src: url('fonts/JetBrainsMono-700_cyrillic-ext.woff2') format('woff2');
     unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
   }
@@ -81,7 +92,7 @@
     font-family: 'VT323';
     font-style: normal;
     font-weight: 400;
-    font-display: swap;
+    font-display: block;
     src: url('fonts/VT323-latin.woff2') format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
   }
@@ -153,27 +164,6 @@
     outline-offset:2px;
   }
 
-  /* ---------- Boot overlay ---------- */
-  .boot-overlay{
-    position:fixed; inset:0; z-index:100;
-    background:var(--bg);
-    color:var(--cyan);
-    font-family:var(--font-body);
-    font-size:clamp(12px,2.4vw,15px);
-    padding:8vh 6vw;
-    white-space:pre-wrap;
-    transition:opacity .5s ease, visibility .5s ease;
-  }
-  .boot-overlay.boot-hide{ opacity:0; visibility:hidden; }
-  .boot-overlay[hidden]{ display:none; }
-  #boot-lines div{ min-height:1.5em; }
-  #boot-lines div:last-child::after{
-    content:'█';
-    color:var(--yellow);
-    margin-left:4px;
-    animation:blink 1s steps(1) infinite;
-  }
-
   /* ---------- Layout shell ---------- */
   .wrap{ max-width:1100px; margin:0 auto; padding:0 18px 60px; }
 
@@ -193,7 +183,7 @@
   }
   @keyframes blink{ 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
   @media (prefers-reduced-motion: reduce){
-    .cursor, #boot-lines div:last-child::after, .scanlines{ animation:none; }
+    .cursor, .scanlines{ animation:none; }
   }
 
   .lang-switch{ display:flex; gap:6px; }
@@ -326,7 +316,9 @@
   .qr-box{
     flex:0 0 auto; width:140px; background:#fff; border:2px double var(--cyan);
     display:flex; align-items:center; justify-content:center;
+    cursor: pointer; transition: transform 0.2s ease;
   }
+  .qr-box:hover { transform: scale(1.05); }
   .qr-box img{ width:140px; height:140px; display:block; border-radius:4px; }
   .qr-caption{ color:var(--muted); font-size:.65rem; text-align:center; line-height:1.3; margin-bottom:4px; }
   .qr-hint{ color:var(--muted); font-size:.6rem; text-align:center; line-height:1.3; margin-top:2px; }
@@ -418,24 +410,11 @@
     height: auto;
   }
 
-  /* Make QR boxes clickable */
-  .qr-box {
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-
-  .qr-box:hover {
-    transform: scale(1.05);
-  }
 </style>
 </head>
 <body>
 
 <div class="scanlines" aria-hidden="true"></div>
-
-<div id="boot-overlay" class="boot-overlay" hidden>
-  <div id="boot-lines"></div>
-</div>
 
 <header class="titlebar">
     <span class="app-name">Codebdbd Donate v1.0</span>
@@ -466,7 +445,7 @@
       <div class="pane-header-row">
         <span id="col-name-2">Имя</span><span id="col-ext-2">Расш.</span><span id="col-type-2">Тип</span>
       </div>
-      <div id="donate-list" role="list"></div>
+      <div id="donate-list" role="listbox" aria-label="Payment methods"></div>
     </div>
 
     <div class="preview">
@@ -495,8 +474,8 @@
   </section>
 
   <nav class="hotbar" aria-label="Быстрые действия">
-    <button class="hotkey" data-hotkey="help"><span class="key">F1</span><span id="hk-help">Помощь</span></button>
-    <button class="hotkey" data-hotkey="primary"><span class="key">F5</span><span id="hk-primary">Открыть</span></button>
+    <button class="hotkey" data-hotkey="help"><span class="key">F1</span><span id="hk-help">Способ</span></button>
+    <button class="hotkey" data-hotkey="primary"><span class="key">F8</span><span id="hk-primary">Открыть</span></button>
     <button class="hotkey" data-hotkey="lang"><span class="key">F9</span><span id="hk-lang">Язык</span></button>
     <button class="hotkey" data-hotkey="top"><span class="key">F10</span><span id="hk-top">Наверх</span></button>
   </nav>
@@ -509,9 +488,9 @@
 </div>
 
 <!-- QR Code Modal -->
-<div id="qr-modal" class="qr-modal" style="display: none;">
+<div id="qr-modal" class="qr-modal" style="display: none;" role="dialog" aria-modal="true" aria-label="QR Code">
   <div class="qr-modal-content">
-    <span class="qr-modal-close" id="qr-modal-close">&times;</span>
+    <span class="qr-modal-close" id="qr-modal-close" aria-label="Close">&times;</span>
     <img id="qr-modal-img" src="" alt="QR Code">
   </div>
 </div>
@@ -556,7 +535,7 @@
       readme: "Меня зовут Алексей. Я разрабатываю бесплатные программы для Windows: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber, Bambookee. Если мои программы оказались вам полезны, поддержите их дальнейшую разработку. Ваши донаты позволяют мне больше времени уделять исправлению ошибок, выпуску обновлений и созданию новых программ. Спасибо за поддержку! ❤️",
       footerThanks: "Спасибо за поддержку моих программ.",
       footerCopy: "© 2026 <a href=\"https://suvorov.pp.ua/\" style=\"color: inherit; text-decoration: none;\">Codebdbd</a>",
-      hotbar: { help: "Помощь", lang: "Язык", top: "Наверх" },
+      hotbar: { help: "Способ", lang: "Язык", top: "Наверх" },
       hotbarPrimary: { mono: "Открыть", usdt: "Копировать", usdt_bep20: "Копировать", share: "Поделиться" },
       monoNote: "⚠ Ссылка на Банку monobank ещё не добавлена. Впишите её в переменную MONOBANK_URL в коде страницы.",
       items: {
@@ -578,17 +557,7 @@
       },
       qrCaptionMono: "Наведи камеру телефона",
       qrHint: "Нажми чтобы увеличить",
-      qrAltMono: "QR-код для доната через monobank",
-      boot: [
-        "CODEBDBD DONATE SYSTEM v1.0",
-        "(c) 2026 Alexey",
-        "",
-        "Загрузка TOOLS.DAT .......... OK",
-        "Загрузка DONATE.SYS ......... OK",
-        "Инициализация Commander ...... OK",
-        "",
-        "Запуск..."
-      ]
+      qrAltMono: "QR-код для доната через monobank"
     },
     en: {
       docTitle: "Codebdbd — Support the developer",
@@ -603,7 +572,7 @@
       readme: "My name is Alexey. I develop free programs for Windows: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber, Bambookee. If my programs have been useful to you, please support their further development. Your donations allow me to spend more time fixing bugs, releasing updates, and creating new programs. Thank you for your support! ❤️",
       footerThanks: "Thank you for supporting my software.",
       footerCopy: "© 2026 <a href=\"https://suvorov.pp.ua/\" style=\"color: inherit; text-decoration: none;\">Codebdbd</a>",
-      hotbar: { help: "Help", lang: "Lang", top: "Top" },
+      hotbar: { help: "Method", lang: "Lang", top: "Top" },
       hotbarPrimary: { mono: "Open", usdt: "Copy", usdt_bep20: "Copy", share: "Share" },
       monoNote: "⚠ The monobank Jar link hasn't been added yet. Set the MONOBANK_URL variable in the page code.",
       items: {
@@ -625,17 +594,7 @@
       },
       qrCaptionMono: "Scan with your phone camera",
       qrHint: "Tap to enlarge",
-      qrAltMono: "QR code to donate via monobank",
-      boot: [
-        "CODEBDBD DONATE SYSTEM v1.0",
-        "(c) 2026 Alexey",
-        "",
-        "Loading TOOLS.DAT ........... OK",
-        "Loading DONATE.SYS .......... OK",
-        "Initializing Commander ....... OK",
-        "",
-        "Starting..."
-      ]
+      qrAltMono: "QR code to donate via monobank"
     },
     uk: {
       docTitle: "Codebdbd — Підтримати розробку",
@@ -650,7 +609,7 @@
       readme: "Мене звати Олексій. Я розробляю безкоштовні програми для Windows: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber, Bambookee. Якщо мої програми стали вам у пригоді, підтримайте їх подальшу розробку. Ваші донати дають змогу більше часу приділяти виправленню помилок, випуску оновлень і створенню нових програм. Дякую за підтримку! ❤️",
       footerThanks: "Дякую за підтримку моїх програм.",
       footerCopy: "© 2026 <a href=\"https://suvorov.pp.ua/\" style=\"color: inherit; text-decoration: none;\">Codebdbd</a>",
-      hotbar: { help: "Довідка", lang: "Мова", top: "Вгору" },
+      hotbar: { help: "Спосіб", lang: "Мова", top: "Вгору" },
       hotbarPrimary: { mono: "Відкрити", usdt: "Копіювати", usdt_bep20: "Копіювати", share: "Поділитися" },
       monoNote: "⚠ Посилання на Банку monobank ще не додано. Впишіть його у змінну MONOBANK_URL у коді сторінки.",
       items: {
@@ -672,21 +631,12 @@
       },
       qrCaptionMono: "Наведи камеру телефону",
       qrHint: "Натисни щоб збільшити",
-      qrAltMono: "QR-код для донату через monobank",
-      boot: [
-        "CODEBDBD DONATE SYSTEM v1.0",
-        "(c) 2026 Alexey",
-        "",
-        "Завантаження TOOLS.DAT ....... OK",
-        "Завантаження DONATE.SYS ...... OK",
-        "Ініціалізація Commander ....... OK",
-        "",
-        "Запуск..."
-      ]
+      qrAltMono: "QR-код для донату через monobank"
     }
   };
 
   var LANG_ORDER = ["ru", "en", "uk"];
+  var DONATE_ORDER = ["mono", "usdt", "usdt_bep20", "share"];
   var currentLang = "ru";
   var selectedId = "usdt";
   var feedbackTimer = null;
@@ -775,9 +725,12 @@
     setLang(LANG_ORDER[(idx + 1) % LANG_ORDER.length]);
   }
 
-  function scrollToReadme(){
-    var node = document.querySelector(".readme");
-    if(node) node.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
+  function cycleDonate(){
+    var idx = DONATE_ORDER.indexOf(selectedId);
+    selectedId = DONATE_ORDER[(idx + 1) % DONATE_ORDER.length];
+    renderDonateList();
+    renderPreview();
+    updateHotbar();
   }
 
   function scrollToTop(){
@@ -797,23 +750,49 @@
     TOOLS_C.forEach(function(tool) {
       var row = document.createElement("div");
       row.className = "pane-row";
-      row.innerHTML =
-        '<span class="col-name"><a href="' + tool.url + '" target="_blank" style="color: inherit; text-decoration: none;">' + tool.name + '</a></span>' +
-        '<span class="col-ext">' + tool.ext + '</span>' +
-        '<span class="col-tag">' + data.freeware + '</span>';
+      var nameSpan = document.createElement("span");
+      nameSpan.className = "col-name";
+      var link = document.createElement("a");
+      link.href = tool.url;
+      link.target = "_blank";
+      link.style.cssText = "color: inherit; text-decoration: none;";
+      link.textContent = tool.name;
+      nameSpan.appendChild(link);
+      var extSpan = document.createElement("span");
+      extSpan.className = "col-ext";
+      extSpan.textContent = tool.ext;
+      var tagSpan = document.createElement("span");
+      tagSpan.className = "col-tag";
+      tagSpan.textContent = data.freeware;
+      row.appendChild(nameSpan);
+      row.appendChild(extSpan);
+      row.appendChild(tagSpan);
       listC.appendChild(row);
     });
-    
+
     // Render D: drive tools
     var listD = el("tools-d-list");
     listD.innerHTML = "";
     TOOLS_D.forEach(function(tool) {
       var row = document.createElement("div");
       row.className = "pane-row";
-      row.innerHTML =
-        '<span class="col-name"><a href="' + tool.url + '" target="_blank" style="color: inherit; text-decoration: none;">' + tool.name + '</a></span>' +
-        '<span class="col-ext">' + tool.ext + '</span>' +
-        '<span class="col-tag">' + data.freeware + '</span>';
+      var nameSpan = document.createElement("span");
+      nameSpan.className = "col-name";
+      var link = document.createElement("a");
+      link.href = tool.url;
+      link.target = "_blank";
+      link.style.cssText = "color: inherit; text-decoration: none;";
+      link.textContent = tool.name;
+      nameSpan.appendChild(link);
+      var extSpan = document.createElement("span");
+      extSpan.className = "col-ext";
+      extSpan.textContent = tool.ext;
+      var tagSpan = document.createElement("span");
+      tagSpan.className = "col-tag";
+      tagSpan.textContent = data.freeware;
+      row.appendChild(nameSpan);
+      row.appendChild(extSpan);
+      row.appendChild(tagSpan);
       listD.appendChild(row);
     });
   }
@@ -827,8 +806,8 @@
       var row = document.createElement("button");
       row.type = "button";
       row.className = "pane-row" + (id === selectedId ? " selected" : "");
-      row.setAttribute("role", "listitem");
-      row.setAttribute("aria-pressed", id === selectedId ? "true" : "false");
+      row.setAttribute("role", "option");
+      row.setAttribute("aria-selected", id === selectedId ? "true" : "false");
       var nameSpan = document.createElement("span");
       nameSpan.className = "col-name";
       nameSpan.textContent = item.name;
@@ -858,37 +837,148 @@
     el("preview-filename").textContent = item.name + item.ext;
 
     var body = el("preview-body");
-    var main = '<p class="preview-title">' + item.title + ' <span class="preview-desc-inline">' + item.desc + '</span></p>';
-    var qr = "";
+    var titleEl = document.createElement("p");
+    titleEl.className = "preview-title";
+    titleEl.textContent = item.title + " ";
+    var descSpan = document.createElement("span");
+    descSpan.className = "preview-desc-inline";
+    descSpan.textContent = item.desc;
+    titleEl.appendChild(descSpan);
+
+    var btn;
+    var feedbackEl;
+    var warnEl;
+    var qrContainer = document.createElement("div");
+    qrContainer.className = "qr-stack";
 
     if(selectedId === "mono"){
-      main += '<a class="btn" href="#" id="action-btn">' + item.btn + ' <span class="chevron">▸</span></a>';
-      main += '<span class="feedback" id="preview-feedback" aria-live="polite"></span>';
-      qr = '<div class="qr-stack"><div class="qr-caption">' + data.qrCaptionMono + '</div>' +
-           '<div class="qr-box"><img src="' + MONOBANK_QR + '" alt="' + data.qrAltMono + '"></div>' +
-           '<div class="qr-hint">' + data.qrHint + '</div></div>';
+      btn = document.createElement("a");
+      btn.className = "btn";
+      btn.href = "#";
+      btn.id = "action-btn";
+      btn.textContent = item.btn + " ";
+      var chevron = document.createElement("span");
+      chevron.className = "chevron";
+      chevron.textContent = "\u25B8";
+      btn.appendChild(chevron);
+      feedbackEl = document.createElement("span");
+      feedbackEl.className = "feedback";
+      feedbackEl.id = "preview-feedback";
+      feedbackEl.setAttribute("aria-live", "polite");
+      var caption = document.createElement("div");
+      caption.className = "qr-caption";
+      caption.textContent = data.qrCaptionMono;
+      var qrBox = document.createElement("div");
+      qrBox.className = "qr-box";
+      var img = document.createElement("img");
+      img.src = MONOBANK_QR;
+      img.alt = data.qrAltMono;
+      qrBox.appendChild(img);
+      var hint = document.createElement("div");
+      hint.className = "qr-hint";
+      hint.textContent = data.qrHint;
+      qrContainer.appendChild(caption);
+      qrContainer.appendChild(qrBox);
+      qrContainer.appendChild(hint);
     } else if(selectedId === "usdt"){
-      main += '<div class="addr-row"><span class="addr-value" id="usdt-address-value">' + USDT_ADDRESS + '</span></div>';
-      main += '<div><button class="btn" id="action-btn">' + item.btn + '</button>' +
-              '<span class="feedback" id="preview-feedback" aria-live="polite"></span></div>';
-      main += '<p class="preview-warn">' + item.warn + '</p>';
-      qr = '<div class="qr-stack"><div class="qr-caption">' + item.qrCaption + '</div>' +
-           '<div class="qr-box"><img src="' + USDT_QR + '" alt="' + item.qrAlt + '"></div>' +
-           '<div class="qr-hint">' + data.qrHint + '</div></div>';
+      var addrRow = document.createElement("div");
+      addrRow.className = "addr-row";
+      var addrVal = document.createElement("span");
+      addrVal.className = "addr-value";
+      addrVal.id = "usdt-address-value";
+      addrVal.textContent = USDT_ADDRESS;
+      addrRow.appendChild(addrVal);
+      btn = document.createElement("button");
+      btn.className = "btn";
+      btn.id = "action-btn";
+      btn.textContent = item.btn;
+      feedbackEl = document.createElement("span");
+      feedbackEl.className = "feedback";
+      feedbackEl.id = "preview-feedback";
+      feedbackEl.setAttribute("aria-live", "polite");
+      warnEl = document.createElement("p");
+      warnEl.className = "preview-warn";
+      warnEl.textContent = item.warn;
+      var caption = document.createElement("div");
+      caption.className = "qr-caption";
+      caption.textContent = item.qrCaption;
+      var qrBox = document.createElement("div");
+      qrBox.className = "qr-box";
+      var img = document.createElement("img");
+      img.src = USDT_QR;
+      img.alt = item.qrAlt;
+      qrBox.appendChild(img);
+      var hint = document.createElement("div");
+      hint.className = "qr-hint";
+      hint.textContent = data.qrHint;
+      qrContainer.appendChild(caption);
+      qrContainer.appendChild(qrBox);
+      qrContainer.appendChild(hint);
     } else if(selectedId === "usdt_bep20"){
-      main += '<div class="addr-row"><span class="addr-value" id="usdt-bep20-address-value">' + USDT_BEP20_ADDRESS + '</span></div>';
-      main += '<div><button class="btn" id="action-btn">' + item.btn + '</button>' +
-              '<span class="feedback" id="preview-feedback" aria-live="polite"></span></div>';
-      main += '<p class="preview-warn">' + item.warn + '</p>';
-      qr = '<div class="qr-stack"><div class="qr-caption">' + item.qrCaption + '</div>' +
-           '<div class="qr-box"><img src="' + BEP20_QR + '" alt="' + item.qrAlt + '"></div>' +
-           '<div class="qr-hint">' + data.qrHint + '</div></div>';
+      var addrRow = document.createElement("div");
+      addrRow.className = "addr-row";
+      var addrVal = document.createElement("span");
+      addrVal.className = "addr-value";
+      addrVal.id = "usdt-bep20-address-value";
+      addrVal.textContent = USDT_BEP20_ADDRESS;
+      addrRow.appendChild(addrVal);
+      btn = document.createElement("button");
+      btn.className = "btn";
+      btn.id = "action-btn";
+      btn.textContent = item.btn;
+      feedbackEl = document.createElement("span");
+      feedbackEl.className = "feedback";
+      feedbackEl.id = "preview-feedback";
+      feedbackEl.setAttribute("aria-live", "polite");
+      warnEl = document.createElement("p");
+      warnEl.className = "preview-warn";
+      warnEl.textContent = item.warn;
+      var caption = document.createElement("div");
+      caption.className = "qr-caption";
+      caption.textContent = item.qrCaption;
+      var qrBox = document.createElement("div");
+      qrBox.className = "qr-box";
+      var img = document.createElement("img");
+      img.src = BEP20_QR;
+      img.alt = item.qrAlt;
+      qrBox.appendChild(img);
+      var hint = document.createElement("div");
+      hint.className = "qr-hint";
+      hint.textContent = data.qrHint;
+      qrContainer.appendChild(caption);
+      qrContainer.appendChild(qrBox);
+      qrContainer.appendChild(hint);
     } else if(selectedId === "share"){
-      main += '<button class="btn" id="action-btn">' + item.btn + ' <span class="chevron">▸</span></button>';
-      main += '<span class="feedback" id="preview-feedback" aria-live="polite"></span>';
+      btn = document.createElement("button");
+      btn.className = "btn";
+      btn.id = "action-btn";
+      btn.textContent = item.btn + " ";
+      var chevron = document.createElement("span");
+      chevron.className = "chevron";
+      chevron.textContent = "\u25B8";
+      btn.appendChild(chevron);
+      feedbackEl = document.createElement("span");
+      feedbackEl.className = "feedback";
+      feedbackEl.id = "preview-feedback";
+      feedbackEl.setAttribute("aria-live", "polite");
     }
 
-    body.innerHTML = '<div class="preview-flex"><div class="preview-main">' + main + '</div>' + qr + '</div>';
+    var previewFlex = document.createElement("div");
+    previewFlex.className = "preview-flex";
+    var previewMain = document.createElement("div");
+    previewMain.className = "preview-main";
+    previewMain.appendChild(titleEl);
+    if(addrRow) previewMain.appendChild(addrRow);
+    if(warnEl) previewMain.appendChild(warnEl);
+    var btnWrap = document.createElement("div");
+    btnWrap.appendChild(btn);
+    btnWrap.appendChild(feedbackEl);
+    previewMain.appendChild(btnWrap);
+    previewFlex.appendChild(previewMain);
+    if(selectedId !== "share") previewFlex.appendChild(qrContainer);
+
+    body.innerHTML = "";
+    body.appendChild(previewFlex);
 
     var actionBtn = el("action-btn");
     if(actionBtn){
@@ -905,8 +995,8 @@
       qrBox.addEventListener("click", function(){
         var modal = el("qr-modal");
         var modalImg = el("qr-modal-img");
-        modal.style.display = "block";
         modalImg.src = qrImg.src;
+        modal._openModal();
       });
     }
   }
@@ -949,7 +1039,13 @@
     el("readme-text").textContent = data.readme;
 
     el("footer-thanks").textContent = data.footerThanks;
-    el("footer-copy").innerHTML = data.footerCopy;
+    var footerCopy = el("footer-copy");
+    footerCopy.textContent = "\u00A9 2026 ";
+    var footerLink = document.createElement("a");
+    footerLink.href = "https://suvorov.pp.ua/";
+    footerLink.style.cssText = "color: inherit; text-decoration: none;";
+    footerLink.textContent = "Codebdbd";
+    footerCopy.appendChild(footerLink);
   }
 
   function renderAll(){
@@ -967,30 +1063,6 @@
     renderAll();
   }
 
-  function runBoot(){
-    if(prefersReducedMotion()) return;
-    var overlay = el("boot-overlay");
-    var linesEl = el("boot-lines");
-    overlay.hidden = false;
-    var lines = d().boot;
-    var i = 0;
-    function next(){
-      if(i < lines.length){
-        var p = document.createElement("div");
-        p.textContent = lines[i];
-        linesEl.appendChild(p);
-        i++;
-        setTimeout(next, lines[i - 1] === "" ? 110 : 170);
-      } else {
-        setTimeout(function(){
-          overlay.classList.add("boot-hide");
-          setTimeout(function(){ overlay.remove(); }, 550);
-        }, 450);
-      }
-    }
-    next();
-  }
-
   function bindHotbar(){
     document.querySelectorAll(".hotkey").forEach(function(btn){
       btn.addEventListener("click", function(){
@@ -1000,7 +1072,7 @@
   }
 
   function handleHotkey(action){
-    if(action === "help") scrollToReadme();
+    if(action === "help") cycleDonate();
     else if(action === "primary") primaryAction();
     else if(action === "lang") cycleLang();
     else if(action === "top") scrollToTop();
@@ -1016,7 +1088,7 @@
 
   function bindKeyboard(){
     window.addEventListener("keydown", function(e){
-      var map = { F1: "help", F5: "primary", F9: "lang", F10: "top" };
+      var map = { F1: "help", F8: "primary", F9: "lang", F10: "top" };
       if(map[e.key]){
         e.preventDefault();
         handleHotkey(map[e.key]);
@@ -1027,25 +1099,50 @@
   function bindModal(){
     var modal = el("qr-modal");
     var closeBtn = el("qr-modal-close");
+    var lastFocused = null;
+
+    function openModal(){
+      lastFocused = document.activeElement;
+      modal.style.display = "block";
+      closeBtn.focus();
+    }
+
+    function closeModal(){
+      modal.style.display = "none";
+      if(lastFocused) lastFocused.focus();
+    }
 
     // Close when clicking X
-    closeBtn.addEventListener("click", function(){
-      modal.style.display = "none";
-    });
+    closeBtn.addEventListener("click", closeModal);
 
     // Close when clicking outside the modal
     modal.addEventListener("click", function(e){
-      if(e.target === modal){
-        modal.style.display = "none";
+      if(e.target === modal) closeModal();
+    });
+
+    // Close with Escape key and trap Tab inside modal
+    document.addEventListener("keydown", function(e){
+      if(modal.style.display !== "block") return;
+      if(e.key === "Escape"){
+        closeModal();
+        return;
+      }
+      if(e.key === "Tab"){
+        var focusable = modal.querySelectorAll("a, button, input, [tabindex]");
+        var first = focusable[0];
+        var last = focusable[focusable.length - 1];
+        if(e.shiftKey && document.activeElement === first){
+          e.preventDefault();
+          last.focus();
+        } else if(!e.shiftKey && document.activeElement === last){
+          e.preventDefault();
+          first.focus();
+        }
       }
     });
 
-    // Close with Escape key
-    document.addEventListener("keydown", function(e){
-      if(e.key === "Escape" && modal.style.display === "block"){
-        modal.style.display = "none";
-      }
-    });
+    // Store reference for external callers
+    modal._openModal = openModal;
   }
 
   document.addEventListener("DOMContentLoaded", function(){
@@ -1054,7 +1151,6 @@
     bindHotbar();
     bindKeyboard();
     bindModal();
-    runBoot();
   });
 })();
 </script>
