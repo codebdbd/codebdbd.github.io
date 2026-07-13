@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Codebdbd — Поддержать разработку</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0000AA;
+    --panel:#0009C7;
+    --cyan:#55FFFF;
+    --yellow:#FFFF55;
+    --ink:#EAEAF7;
+    --muted:#9494E0;
+    --ok:#66FF66;
+    --err:#FF7A7A;
+    --font-display:'VT323','Courier New',monospace;
+    --font-body:'IBM Plex Mono','Consolas','Courier New',monospace;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{ margin:0; padding:0; }
+
+  body{
+    background:
+      radial-gradient(ellipse 120% 90% at 50% 0%, var(--panel) 0%, var(--bg) 62%);
+    color:var(--ink);
+    font-family:var(--font-body);
+    min-height:100vh;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .scanlines{
+    position:fixed; inset:0; pointer-events:none; z-index:50;
+    background:repeating-linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.14) 0px,
+      rgba(0,0,0,0.14) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode:multiply;
+    opacity:.4;
+  }
+
+  a{ color:inherit; }
+
+  button{ font:inherit; }
+
+  :focus-visible{
+    outline:2px solid var(--yellow);
+    outline-offset:2px;
+  }
+
+  /* ---------- Boot overlay ---------- */
+  .boot-overlay{
+    position:fixed; inset:0; z-index:100;
+    background:var(--bg);
+    color:var(--cyan);
+    font-family:var(--font-body);
+    font-size:clamp(12px,2.4vw,15px);
+    padding:8vh 6vw;
+    white-space:pre-wrap;
+    transition:opacity .5s ease, visibility .5s ease;
+  }
+  .boot-overlay.boot-hide{ opacity:0; visibility:hidden; }
+  .boot-overlay[hidden]{ display:none; }
+  #boot-lines div{ min-height:1.5em; }
+  #boot-lines div:last-child::after{
+    content:'█';
+    color:var(--yellow);
+    margin-left:4px;
+    animation:blink 1s steps(1) infinite;
+  }
+
+  /* ---------- Layout shell ---------- */
+  .wrap{ max-width:1100px; margin:0 auto; padding:0 18px 60px; }
+
+  .titlebar{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+    background:var(--panel);
+    border-bottom:3px double var(--cyan);
+    padding:12px 18px 12px 18px;
+  }
+  .titlebar .app-name{
+    font-weight:700; letter-spacing:.05em; color:var(--yellow); font-size:.82rem; text-transform:uppercase;
+  }
+  .titlebar .prompt{ color:var(--cyan); font-size:.82rem; }
+  .cursor{
+    display:inline-block; width:.5em; background:var(--yellow); margin-left:2px;
+    animation:blink 1s steps(1) infinite;
+  }
+  @keyframes blink{ 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
+  @media (prefers-reduced-motion: reduce){
+    .cursor, #boot-lines div:last-child::after{ animation:none; }
+  }
+
+  .lang-switch{ display:flex; gap:6px; }
+  .lang-btn{
+    background:transparent; border:1px solid var(--cyan); color:var(--cyan);
+    padding:4px 11px; font-size:.75rem; letter-spacing:.06em; cursor:pointer;
+  }
+  .lang-btn:hover{ background:rgba(85,255,255,.15); }
+  .lang-btn[aria-pressed="true"]{
+    background:var(--yellow); border-color:var(--yellow); color:var(--bg); font-weight:700;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{ text-align:center; padding:24px 10px 10px; }
+  @keyframes wordmarkGlow {
+    0%, 100% {
+      text-shadow: 0 0 12px rgba(255,255,85,.35), 0 0 24px rgba(255,255,85,.25);
+    }
+    50% {
+      text-shadow: 0 0 18px rgba(255,255,85,.55), 0 0 36px rgba(255,255,85,.35);
+    }
+  }
+  .hero .wordmark{
+    font-family:var(--font-display);
+    font-size:clamp(52px,12vw,120px);
+    color:var(--yellow);
+    text-shadow:0 0 16px rgba(255,255,85,.45);
+    line-height:.95;
+    letter-spacing:.02em;
+    animation: wordmarkGlow 3s ease-in-out infinite;
+  }
+  .hero h1{
+    font-size:clamp(16px,2.6vw,22px);
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink);
+    margin:14px 0 0;
+    font-weight:700;
+  }
+  .hero .tagline{
+    color:var(--muted);
+    max-width:800px;
+    margin:14px auto 0;
+    font-size:.92rem;
+  }
+
+
+  /* ---------- Panes ---------- */
+  /* Unified grid styles for all section grids */
+  .section-grid {
+    display: grid;
+    gap: 22px;
+    margin-top: 20px;
+  }
+
+  /* Specific grid column layouts */
+  .panes-grid,
+  .tools-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .donate-preview-grid {
+    grid-template-columns: 1fr 1.5fr;
+  }
+
+  @media (max-width:720px){ 
+    .section-grid { 
+      grid-template-columns: 1fr; 
+    } 
+  }
+
+  /* Make preview fit in the grid cell */
+  .donate-preview-grid .preview{
+    margin-top:0;
+  }
+
+  .pane{
+    border:4px double var(--cyan);
+    background:rgba(0,0,0,0.08);
+  }
+  .pane-title{
+    background:var(--panel); color:var(--yellow);
+    padding:7px 14px; font-weight:700; font-size:.78rem;
+    letter-spacing:.05em; text-transform:uppercase;
+    border-bottom:2px solid var(--cyan);
+  }
+  .pane-header-row, .pane-row{
+    display:grid; grid-template-columns:1fr 64px 118px; gap:8px; align-items:center;
+  }
+  .pane-header-row{
+    padding:7px 14px; color:var(--muted); font-size:.68rem;
+    letter-spacing:.08em; text-transform:uppercase;
+    border-bottom:1px solid rgba(85,255,255,.25);
+  }
+  .pane-row{
+    width:100%; padding:8px 14px; background:transparent; border:0; border-bottom:1px solid rgba(85,255,255,.08);
+    color:var(--cyan); font-family:var(--font-body); font-size:.83rem; text-align:left;
+  }
+  .pane-row:last-child{ border-bottom:0; }
+  button.pane-row{ cursor:pointer; }
+  button.pane-row:hover{ background:rgba(85,255,255,.12); }
+  button.pane-row.selected{
+    background:var(--yellow); color:var(--bg); font-weight:700;
+  }
+  .pane-row .col-ext, .pane-row .col-tag{ opacity:.85; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .pane-row.selected .col-ext, .pane-row.selected .col-tag{ opacity:1; }
+  .tools-empty-note{ padding:10px 14px; color:var(--muted); font-size:.78rem; }
+
+  /* ---------- Preview panel ---------- */
+  .preview{
+    border:4px double var(--cyan); background:rgba(0,0,0,0.08);
+  }
+  .preview-body{ padding:18px; }
+  .preview-title{ color:var(--yellow); font-weight:700; font-size:.9rem; margin:0 0 8px; text-transform:uppercase; letter-spacing:.03em;}
+  .preview-desc{ color:var(--ink); font-size:.88rem; margin:0 0 14px; }
+  .preview-note{ color:var(--muted); font-size:.78rem; margin-top:10px; }
+  .addr-row{
+    display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+    background:rgba(0,0,0,.25); border:1px dashed var(--cyan); padding:10px 12px; margin-bottom:6px;
+  }
+  .addr-label{ color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; display:block; margin-bottom:4px; }
+  .addr-value{ color:var(--cyan); font-size:.86rem; word-break:break-all; }
+
+  .preview-flex{ display:flex; gap:22px; flex-wrap:wrap; align-items:flex-start; }
+  .preview-main{ flex:1 1 260px; min-width:180px; }
+  .qr-stack{ flex:0 0 auto; display:flex; flex-direction:column; align-items:center; }
+  .qr-box{
+    flex:0 0 auto; width:140px; background:#fff; border:2px double var(--cyan);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .qr-box img{ width:140px; height:140px; display:block; border-radius:4px; }
+  .qr-caption{ color:var(--muted); font-size:.65rem; text-align:center; line-height:1.3; margin-bottom:4px; }
+  .qr-hint{ color:var(--muted); font-size:.6rem; text-align:center; line-height:1.3; margin-top:2px; }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--yellow); color:var(--bg); border:0;
+    padding:9px 16px; font-weight:700; font-size:.82rem; letter-spacing:.03em;
+    cursor:pointer; text-decoration:none;
+  }
+  .btn:hover{ filter:brightness(1.08); }
+  .btn:active{ filter:brightness(.95); }
+  .btn .chevron{ font-weight:400; }
+
+  .feedback{
+    display:inline-block; margin-left:10px; font-size:.78rem; min-height:1.2em;
+  }
+  .feedback.ok{ color:var(--ok); }
+  .feedback.err{ color:var(--err); }
+
+  /* ---------- README ---------- */
+  .readme{ margin-top:10px; border:4px double var(--cyan); background:rgba(0,0,0,.08); }
+  .readme-body{ padding:18px; color:var(--ink); font-size:.88rem; border-left:3px solid rgba(85,255,255,.35); margin:16px; }
+
+  /* ---------- Hotbar ---------- */
+  .hotbar{
+    margin-top:26px; display:grid; grid-template-columns:repeat(4,1fr);
+    gap:2px; background:var(--panel); border:2px solid var(--cyan);
+  }
+  @media (max-width:600px){ .hotbar{ grid-template-columns:repeat(2,1fr); } }
+  .hotkey{
+    display:flex; align-items:center; gap:8px; background:transparent; border:0;
+    color:var(--cyan); padding:10px 12px; cursor:pointer; font-size:.78rem; text-align:left;
+  }
+  .hotkey:hover{ background:rgba(85,255,255,.12); }
+  .hotkey .key{
+    background:var(--bg); color:var(--yellow); font-weight:700;
+    padding:2px 7px; border:1px solid var(--cyan); font-size:.72rem; flex-shrink:0;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    margin-top:26px; padding-top:14px; border-top:1px solid rgba(85,255,255,.3);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+    color:var(--muted); font-size:.75rem;
+  }
+
+  /* QR Code Modal */
+  .qr-modal {
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.9);
+  }
+
+  .qr-modal-content {
+    position: relative;
+    background-color: var(--bg);
+    margin: 5% auto;
+    padding: 20px;
+    border: 4px double var(--cyan);
+    width: 90%;
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .qr-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: var(--cyan);
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .qr-modal-close:hover {
+    color: var(--yellow);
+  }
+
+  .qr-modal-img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Make QR boxes clickable */
+  .qr-box {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .qr-box:hover {
+    transform: scale(1.05);
+  }
+</style>
+</head>
+<body>
+
+<div class="scanlines" aria-hidden="true"></div>
+
+<div id="boot-overlay" class="boot-overlay" hidden>
+  <div id="boot-lines"></div>
+</div>
+
+<header class="titlebar">
+    <span class="app-name">Codebdbd Donate v1.0</span>
+    <nav class="lang-switch" aria-label="Language">
+      <button class="lang-btn" data-lang="ru" aria-pressed="true">RU</button>
+      <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      <button class="lang-btn" data-lang="uk" aria-pressed="false">UA</button>
+    </nav>
+    <span class="prompt">C:\CODEBDBD&gt;<span class="cursor">&nbsp;</span></span>
+  </header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="wordmark">CODEBDBD</div>
+    <h1 id="hero-title">Поддержать разработчика</h1>
+  </section>
+
+  <section class="readme">
+    <div class="pane-title">README.TXT</div>
+    <p class="readme-body" id="readme-text"></p>
+  </section>
+
+  <!-- First row: Donate + Preview -->
+  <section class="donate-preview-grid section-grid">
+    <div class="pane">
+      <div class="pane-title" id="donate-pane-title">C:\DONATE\ — Выбрать способ поддержки</div>
+      <div class="pane-header-row">
+        <span id="col-name-2">Имя</span><span id="col-ext-2">Расш.</span><span id="col-type-2">Тип</span>
+      </div>
+      <div id="donate-list" role="list"></div>
+    </div>
+
+    <div class="preview">
+      <div class="pane-title"><span id="preview-label">ПРОСМОТР</span>: <span id="preview-filename">MONOBANK.UAH</span></div>
+      <div class="preview-body" id="preview-body"></div>
+    </div>
+  </section>
+
+  <!-- Second row: Tools (C: and D:) -->
+  <section class="tools-grid section-grid">
+    <div class="pane">
+      <div class="pane-title" id="tools-c-pane-title">C:\</div>
+      <div class="pane-header-row">
+        <span id="col-name">Имя</span><span id="col-ext">Расш.</span><span id="col-type">Тип</span>
+      </div>
+      <div id="tools-c-list"></div>
+    </div>
+
+    <div class="pane">
+      <div class="pane-title" id="tools-d-pane-title">D:\</div>
+      <div class="pane-header-row">
+        <span id="col-name-3">Имя</span><span id="col-ext-3">Расш.</span><span id="col-type-3">Тип</span>
+      </div>
+      <div id="tools-d-list"></div>
+    </div>
+  </section>
+
+  <nav class="hotbar" aria-label="Быстрые действия">
+    <button class="hotkey" data-hotkey="help"><span class="key">F1</span><span id="hk-help">Помощь</span></button>
+    <button class="hotkey" data-hotkey="primary"><span class="key">F5</span><span id="hk-primary">Открыть</span></button>
+    <button class="hotkey" data-hotkey="lang"><span class="key">F9</span><span id="hk-lang">Язык</span></button>
+    <button class="hotkey" data-hotkey="top"><span class="key">F10</span><span id="hk-top">Наверх</span></button>
+  </nav>
+
+  <footer>
+    <span id="footer-thanks">Спасибо за поддержку моих программ.</span>
+    <span id="footer-copy">© 2026 <a href="https://suvorov.pp.ua/" style="color: inherit; text-decoration: none;">Codebdbd</a></span>
+  </footer>
+
+</div>
+
+<!-- QR Code Modal -->
+<div id="qr-modal" class="qr-modal" style="display: none;">
+  <div class="qr-modal-content">
+    <span class="qr-modal-close" id="qr-modal-close">&times;</span>
+    <img id="qr-modal-img" src="" alt="QR Code">
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------------------------------------------------------------
+  // CONFIG — fill in before publishing
+  // ---------------------------------------------------------------
+  var MONOBANK_URL = "https://send.monobank.ua/jar/8Tdmoq97HA";
+  var USDT_ADDRESS = "TEA9mZ416wUi1itbi65DM88Luv8iG9BGbF";
+  var USDT_BEP20_ADDRESS = "0x8D576F3DC45Ae4B3da0239aB0Fd9516Bf6D0dF68";
+  var SHARE_URL = "https://suvorov.pp.ua/";
+  var MONOBANK_QR = "img/monobank.png";
+  var USDT_QR = "img/trc20.png";
+  var BEP20_QR = "img/bep20.png";
+
+  var TOOLS_C = [
+    { name: "AITECOMMANDER", ext: ".EXE", url: "https://github.com/codebdbd/aitecommander" },
+    { name: "AITEBAR",       ext: ".EXE", url: "https://github.com/codebdbd/aitebar" },
+    { name: "AITEPROFILES",  ext: ".EXE", url: "https://github.com/codebdbd/aiteprofiles" }
+  ];
+  var TOOLS_D = [
+    { name: "BALDGRABBER",   ext: ".EXE", url: "https://github.com/codebdbd/baldgrabber" },
+    { name: "BAMBOOKI",      ext: ".EXE", url: "https://github.com/codebdbd/aitebambookee" },
+    { name: "RAPNOTE",       ext: ".EXE", url: "https://github.com/codebdbd/rapnote" }
+  ];
+
+  var translations = {
+    ru: {
+      docTitle: "Codebdbd — Поддержать разработку",
+      cols: { name: "Имя", ext: "Расш.", type: "Тип" },
+      toolsCPaneTitle: "C:\\",
+      toolsDPaneTitle: "D:\\",
+      donatePaneTitle: "C:\\DONATE\\ — Выбрать способ поддержки",
+      freeware: "FREEWARE",
+      heroTitle: "Поддержать разработчика",
+      heroTagline: "Если мои программы оказались вам полезны, поддержите их дальнейшую разработку. Донаты позволяют мне больше времени уделять исправлению ошибок, выпуску обновлений и созданию новых программ.",
+      previewLabel: "ПРОСМОТР",
+      readme: "Меня зовут Алексей. Я создаю бесплатные программы и утилиты для Windows: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber и другие инструменты. Если мои программы оказались вам полезны, поддержите их дальнейшую разработку. Донаты позволяют мне больше времени уделять исправлению ошибок, выпуску обновлений и созданию новых программ.",
+      footerThanks: "Спасибо за поддержку моих программ.",
+      footerCopy: "© 2026 <a href=\"https://suvorov.pp.ua/\" style=\"color: inherit; text-decoration: none;\">Codebdbd</a>",
+      hotbar: { help: "Помощь", lang: "Язык", top: "Наверх" },
+      hotbarPrimary: { mono: "Открыть", usdt: "Копировать", usdt_bep20: "Копировать", share: "Поделиться" },
+      monoNote: "⚠ Ссылка на Банку monobank ещё не добавлена. Впишите её в переменную MONOBANK_URL в коде страницы.",
+      items: {
+        mono:  { name:"MONOBANK", ext:".UAH", tag:"<БАНКА>", title:"MONOBANK · UAH",
+                 desc:"Донат в украинских гривнах.", btn:"Открыть Банку monobank" },
+        usdt:  { name:"USDT_TRC20", ext:".ADDR", tag:"<КОШЕЛЁК>", title:"USDT · TRC20",
+                 desc:"USDT в сети TRON.", addrLabel:"Адрес:", note:"Отправляйте только USDT через сеть TRON (TRC20). Memo не требуется.",
+                 btn:"Скопировать адрес", copiedMsg:"Адрес скопирован", errorMsg:"Не удалось скопировать. Выделите адрес вручную.",
+                 qrAlt:"QR-код с адресом USDT (TRC20)", qrCaption:"Наведи камеру телефона" },
+        usdt_bep20: { name:"USDT_BEP20", ext:".ADDR", tag:"<КОШЕЛЁК>", title:"USDT · BEP20",
+                 desc:"USDT в сети BNB (Binance Smart Chain).", addrLabel:"Адрес:", note:"Отправляйте только USDT через сеть BNB (BEP20).",
+                 btn:"Скопировать адрес", copiedMsg:"Адрес скопирован", errorMsg:"Не удалось скопировать. Выделите адрес вручную.",
+                 qrAlt:"QR-код с адресом USDT (BEP20)", qrCaption:"Наведи камеру телефона" },
+        share: { name:"SHARE", ext:".TXT", tag:"<ССЫЛКА>", title:"Поделиться",
+                 desc:"Вы можете помочь, порекомендовав мои услуги друзьям, коллегам или знакомым.",
+                 btn:"Поделиться моими услугами", fallbackMsg:"Ссылка скопирована" }
+      },
+      qrCaptionMono: "Наведи камеру телефона",
+      qrHint: "Нажми чтобы увеличить",
+      qrAltMono: "QR-код для доната через monobank",
+      boot: [
+        "CODEBDBD DONATE SYSTEM v1.0",
+        "(c) 2026 Alexey",
+        "",
+        "Загрузка TOOLS.DAT .......... OK",
+        "Загрузка DONATE.SYS ......... OK",
+        "Инициализация Commander ...... OK",
+        "",
+        "Запуск..."
+      ]
+    },
+    en: {
+      docTitle: "Codebdbd — Support the developer",
+      cols: { name: "Name", ext: "Ext", type: "Type" },
+      toolsCPaneTitle: "C:\\",
+      toolsDPaneTitle: "D:\\",
+      donatePaneTitle: "C:\\DONATE\\ — Choose support method",
+      freeware: "FREEWARE",
+      heroTitle: "Support the developer",
+      heroTagline: "If my software has been useful to you, support its further development. Donations allow me to spend more time fixing bugs, releasing updates, and creating new programs.",
+      previewLabel: "PREVIEW",
+      readme: "My name is Alexey. I create free Windows applications and utilities: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber, and other tools. If my programs have been useful to you, please support their continued development. Donations allow me to spend more time fixing bugs, releasing updates, and creating new software.",
+      footerThanks: "Thank you for supporting my software.",
+      footerCopy: "© 2026 <a href=\"https://suvorov.pp.ua/\" style=\"color: inherit; text-decoration: none;\">Codebdbd</a>",
+      hotbar: { help: "Help", lang: "Lang", top: "Top" },
+      hotbarPrimary: { mono: "Open", usdt: "Copy", usdt_bep20: "Copy", share: "Share" },
+      monoNote: "⚠ The monobank Jar link hasn't been added yet. Set the MONOBANK_URL variable in the page code.",
+      items: {
+        mono:  { name:"MONOBANK", ext:".UAH", tag:"<JAR>", title:"MONOBANK · UAH",
+                 desc:"Donate in Ukrainian hryvnias.", btn:"Open monobank Jar" },
+        usdt:  { name:"USDT_TRC20", ext:".ADDR", tag:"<WALLET>", title:"USDT · TRC20",
+                 desc:"USDT on the TRON network.", addrLabel:"Address:", note:"Send only USDT through the TRON network (TRC20). Memo is not required.",
+                 btn:"Copy address", copiedMsg:"Address copied", errorMsg:"Copy failed. Select the address manually.",
+                 qrAlt:"QR code with the USDT (TRC20) address", qrCaption:"Scan with your phone camera" },
+        usdt_bep20: { name:"USDT_BEP20", ext:".ADDR", tag:"<WALLET>", title:"USDT · BEP20",
+                 desc:"USDT on the BNB network (Binance Smart Chain).", addrLabel:"Address:", note:"Send only USDT through the BNB network (BEP20).",
+                 btn:"Copy address", copiedMsg:"Address copied", errorMsg:"Copy failed. Select the address manually.",
+                 qrAlt:"QR code with the USDT (BEP20) address", qrCaption:"Scan with your phone camera" },
+        share: { name:"SHARE", ext:".TXT", tag:"<LINK>", title:"Share",
+                 desc:"You can also help by recommending my services to friends, colleagues, or acquaintances.",
+                 btn:"Share my services", fallbackMsg:"Link copied" }
+      },
+      qrCaptionMono: "Scan with your phone camera",
+      qrHint: "Tap to enlarge",
+      qrAltMono: "QR code to donate via monobank",
+      boot: [
+        "CODEBDBD DONATE SYSTEM v1.0",
+        "(c) 2026 Alexey",
+        "",
+        "Loading TOOLS.DAT ........... OK",
+        "Loading DONATE.SYS .......... OK",
+        "Initializing Commander ....... OK",
+        "",
+        "Starting..."
+      ]
+    },
+    uk: {
+      docTitle: "Codebdbd — Підтримати розробку",
+      cols: { name: "Ім'я", ext: "Розш.", type: "Тип" },
+      toolsCPaneTitle: "C:\\",
+      toolsDPaneTitle: "D:\\",
+      donatePaneTitle: "C:\\DONATE\\ — Вибрати спосіб підтримки",
+      freeware: "FREEWARE",
+      heroTitle: "Підтримати розробника",
+      heroTagline: "Якщо мої програми стали вам у пригоді, підтримайте їх подальшу розробку. Донати дають змогу більше часу приділяти виправленню помилок, випуску оновлень і створенню нових програм.",
+      previewLabel: "ПЕРЕГЛЯД",
+      readme: "Мене звати Олексій. Я створюю безкоштовні програми та утиліти для Windows: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber та інші інструменти. Якщо мої програми стали вам у пригоді, підтримайте їх подальшу розробку. Донати дають змогу більше часу приділяти виправленню помилок, випуску оновлень і створенню нових програм.",
+      footerThanks: "Дякую за підтримку моїх програм.",
+      footerCopy: "© 2026 <a href=\"https://suvorov.pp.ua/\" style=\"color: inherit; text-decoration: none;\">Codebdbd</a>",
+      hotbar: { help: "Довідка", lang: "Мова", top: "Вгору" },
+      hotbarPrimary: { mono: "Відкрити", usdt: "Копіювати", usdt_bep20: "Копіювати", share: "Поділитися" },
+      monoNote: "⚠ Посилання на Банку monobank ще не додано. Впишіть його у змінну MONOBANK_URL у коді сторінки.",
+      items: {
+        mono:  { name:"MONOBANK", ext:".UAH", tag:"<БАНКА>", title:"MONOBANK · UAH",
+                 desc:"Донат в українських гривнях.", btn:"Відкрити Банку monobank" },
+        usdt:  { name:"USDT_TRC20", ext:".ADDR", tag:"<ГАМАНЕЦЬ>", title:"USDT · TRC20",
+                 desc:"USDT у мережі TRON.", addrLabel:"Адреса:", note:"Надсилайте лише USDT через мережу TRON (TRC20). Memo не потрібен.",
+                 btn:"Скопіювати адресу", copiedMsg:"Адресу скопійовано", errorMsg:"Не вдалося скопіювати. Виділіть адресу вручну.",
+                 qrAlt:"QR-код з адресою USDT (TRC20)", qrCaption:"Наведи камеру телефону" },
+        usdt_bep20: { name:"USDT_BEP20", ext:".ADDR", tag:"<ГАМАНЕЦЬ>", title:"USDT · BEP20",
+                 desc:"USDT у мережі BNB (Binance Smart Chain).", addrLabel:"Адреса:", note:"Надсилайте лише USDT через мережу BNB (BEP20).",
+                 btn:"Скопіювати адресу", copiedMsg:"Адресу скопійовано", errorMsg:"Не вдалося скопіювати. Виділіть адресу вручну.",
+                 qrAlt:"QR-код з адресою USDT (BEP20)", qrCaption:"Наведи камеру телефону" },
+        share: { name:"SHARE", ext:".TXT", tag:"<ПОСИЛАННЯ>", title:"Поділитися",
+                 desc:"Ви можете допомогти, порадивши мої послуги друзям, колегам або знайомим.",
+                 btn:"Поділитися моїми послугами", fallbackMsg:"Посилання скопійовано" }
+      },
+      qrCaptionMono: "Наведи камеру телефону",
+      qrHint: "Натисни щоб збільшити",
+      qrAltMono: "QR-код для донату через monobank",
+      boot: [
+        "CODEBDBD DONATE SYSTEM v1.0",
+        "(c) 2026 Alexey",
+        "",
+        "Завантаження TOOLS.DAT ....... OK",
+        "Завантаження DONATE.SYS ...... OK",
+        "Ініціалізація Commander ....... OK",
+        "",
+        "Запуск..."
+      ]
+    }
+  };
+
+  var LANG_ORDER = ["ru", "en", "uk"];
+  var currentLang = "ru";
+  var selectedId = "usdt";
+  var feedbackTimer = null;
+
+  function d(){ return translations[currentLang]; }
+
+  function el(id){ return document.getElementById(id); }
+
+  function selectText(node){
+    try{
+      var range = document.createRange();
+      range.selectNodeContents(node);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }catch(e){ /* no-op */ }
+  }
+
+  function showFeedback(msg, ok){
+    var fb = el("preview-feedback");
+    if(!fb) return;
+    fb.textContent = msg;
+    fb.className = "feedback " + (ok ? "ok" : "err");
+    clearTimeout(feedbackTimer);
+    feedbackTimer = setTimeout(function(){ fb.textContent = ""; fb.className = "feedback"; }, 3200);
+  }
+
+  function openMonobank(){
+    var data = d();
+    if(!MONOBANK_URL){
+      showFeedback(data.monoNote, false);
+      return;
+    }
+    window.open(MONOBANK_URL, "_blank", "noopener");
+  }
+
+  function copyAddress(){
+    var data = d().items.usdt;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(USDT_ADDRESS).then(function(){
+        showFeedback(data.copiedMsg, true);
+      }).catch(function(){
+        var node = el("usdt-address-value");
+        if(node) selectText(node);
+        showFeedback(data.errorMsg, false);
+      });
+    } else {
+      var node = el("usdt-address-value");
+      if(node) selectText(node);
+      showFeedback(data.errorMsg, false);
+    }
+  }
+
+  function doShare(){
+    var data = d().items.share;
+    if(navigator.share){
+      navigator.share({ title: "Codebdbd", text: shareTextFor(currentLang), url: SHARE_URL }).catch(function(){ /* user cancelled — ignore */ });
+    } else if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(SHARE_URL).then(function(){
+        showFeedback(data.fallbackMsg, true);
+      }).catch(function(){
+        showFeedback(data.fallbackMsg, false);
+      });
+    } else {
+      showFeedback(data.fallbackMsg, false);
+    }
+  }
+
+  function shareTextFor(lang){
+    var map = {
+      ru: "Услуги Алексея: разработка программ и другие технические услуги.",
+      en: "Alexey\u2019s services: software development and other technical services.",
+      uk: "Послуги Олексія: розробка програм та інші технічні послуги."
+    };
+    return map[lang];
+  }
+
+  function primaryAction(){
+    if(selectedId === "mono") openMonobank();
+    else if(selectedId === "usdt") copyAddress();
+    else if(selectedId === "share") doShare();
+  }
+
+  function cycleLang(){
+    var idx = LANG_ORDER.indexOf(currentLang);
+    setLang(LANG_ORDER[(idx + 1) % LANG_ORDER.length]);
+  }
+
+  function scrollToReadme(){
+    var node = document.querySelector(".readme");
+    if(node) node.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
+  }
+
+  function scrollToTop(){
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+  }
+
+  function prefersReducedMotion(){
+    return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  function renderTools() {
+    var data = d();
+    
+    // Render C: drive tools
+    var listC = el("tools-c-list");
+    listC.innerHTML = "";
+    TOOLS_C.forEach(function(tool) {
+      var row = document.createElement("div");
+      row.className = "pane-row";
+      row.innerHTML =
+        '<span class="col-name"><a href="' + tool.url + '" target="_blank" style="color: inherit; text-decoration: none;">' + tool.name + '</a></span>' +
+        '<span class="col-ext">' + tool.ext + '</span>' +
+        '<span class="col-tag">' + data.freeware + '</span>';
+      listC.appendChild(row);
+    });
+    
+    // Render D: drive tools
+    var listD = el("tools-d-list");
+    listD.innerHTML = "";
+    TOOLS_D.forEach(function(tool) {
+      var row = document.createElement("div");
+      row.className = "pane-row";
+      row.innerHTML =
+        '<span class="col-name"><a href="' + tool.url + '" target="_blank" style="color: inherit; text-decoration: none;">' + tool.name + '</a></span>' +
+        '<span class="col-ext">' + tool.ext + '</span>' +
+        '<span class="col-tag">' + data.freeware + '</span>';
+      listD.appendChild(row);
+    });
+  }
+
+  function renderDonateList(){
+    var data = d();
+    var list = el("donate-list");
+    list.innerHTML = "";
+    ["mono", "usdt", "usdt_bep20", "share"].forEach(function(id){
+      var item = data.items[id];
+      var row = document.createElement("button");
+      row.type = "button";
+      row.className = "pane-row" + (id === selectedId ? " selected" : "");
+      row.setAttribute("role", "listitem");
+      row.setAttribute("aria-pressed", id === selectedId ? "true" : "false");
+      row.innerHTML =
+        '<span class="col-name">' + item.name + '</span>' +
+        '<span class="col-ext">' + item.ext + '</span>' +
+        '<span class="col-tag">' + item.tag + '</span>';
+      row.addEventListener("click", function(){
+        selectedId = id;
+        renderDonateList();
+        renderPreview();
+        updateHotbar();
+      });
+      list.appendChild(row);
+    });
+  }
+
+  function renderPreview(){
+    var data = d();
+    var item = data.items[selectedId];
+    el("preview-label").textContent = data.previewLabel;
+    el("preview-filename").textContent = item.name + item.ext;
+
+    var body = el("preview-body");
+    var main = '<p class="preview-title">' + item.title + '</p>';
+    main += '<p class="preview-desc">' + item.desc + '</p>';
+    var qr = "";
+
+    if(selectedId === "mono"){
+      main += '<a class="btn" href="#" id="action-btn">' + item.btn + ' <span class="chevron">▸</span></a>';
+      main += '<span class="feedback" id="preview-feedback" aria-live="polite"></span>';
+      qr = '<div class="qr-stack"><div class="qr-caption">' + data.qrCaptionMono + '</div>' +
+           '<div class="qr-box"><img src="' + MONOBANK_QR + '" alt="' + data.qrAltMono + '"></div>' +
+           '<div class="qr-hint">' + data.qrHint + '</div></div>';
+    } else if(selectedId === "usdt"){
+      main += '<span class="addr-label">' + item.addrLabel + '</span>' +
+              '<div class="addr-row"><span class="addr-value" id="usdt-address-value">' + USDT_ADDRESS + '</span></div>';
+      main += '<div><button class="btn" id="action-btn">' + item.btn + '</button>' +
+              '<span class="feedback" id="preview-feedback" aria-live="polite"></span></div>';
+      main += '<p class="preview-note">' + item.note + '</p>';
+      qr = '<div class="qr-stack"><div class="qr-caption">' + item.qrCaption + '</div>' +
+           '<div class="qr-box"><img src="' + USDT_QR + '" alt="' + item.qrAlt + '"></div>' +
+           '<div class="qr-hint">' + data.qrHint + '</div></div>';
+    } else if(selectedId === "usdt_bep20"){
+      main += '<span class="addr-label">' + item.addrLabel + '</span>' +
+              '<div class="addr-row"><span class="addr-value" id="usdt-bep20-address-value">' + USDT_BEP20_ADDRESS + '</span></div>';
+      main += '<div><button class="btn" id="action-btn">' + item.btn + '</button>' +
+              '<span class="feedback" id="preview-feedback" aria-live="polite"></span></div>';
+      main += '<p class="preview-note">' + item.note + '</p>';
+      qr = '<div class="qr-stack"><div class="qr-caption">' + item.qrCaption + '</div>' +
+           '<div class="qr-box"><img src="' + BEP20_QR + '" alt="' + item.qrAlt + '"></div>' +
+           '<div class="qr-hint">' + data.qrHint + '</div></div>';
+    } else if(selectedId === "share"){
+      main += '<button class="btn" id="action-btn">' + item.btn + ' <span class="chevron">▸</span></button>';
+      main += '<span class="feedback" id="preview-feedback" aria-live="polite"></span>';
+    }
+
+    body.innerHTML = '<div class="preview-flex"><div class="preview-main">' + main + '</div>' + qr + '</div>';
+
+    var actionBtn = el("action-btn");
+    if(actionBtn){
+      actionBtn.addEventListener("click", function(e){
+        e.preventDefault();
+        primaryAction();
+      });
+    }
+
+    // Add click handler to QR box
+    var qrBox = body.querySelector(".qr-box");
+    if(qrBox){
+      var qrImg = qrBox.querySelector("img");
+      qrBox.addEventListener("click", function(){
+        var modal = el("qr-modal");
+        var modalImg = el("qr-modal-img");
+        modal.style.display = "block";
+        modalImg.src = qrImg.src;
+      });
+    }
+  }
+
+  function updateHotbar(){
+    var data = d();
+    el("hk-help").textContent = data.hotbar.help;
+    el("hk-lang").textContent = data.hotbar.lang;
+    el("hk-top").textContent = data.hotbar.top;
+    el("hk-primary").textContent = data.hotbarPrimary[selectedId];
+  }
+
+  function updateLangButtons(){
+    document.querySelectorAll(".lang-btn").forEach(function(btn){
+      btn.setAttribute("aria-pressed", btn.getAttribute("data-lang") === currentLang ? "true" : "false");
+    });
+  }
+
+  function renderStatic(){
+    var data = d();
+    document.documentElement.lang = currentLang === "uk" ? "uk" : currentLang;
+    document.title = data.docTitle;
+
+    el("col-name").textContent = data.cols.name;
+    el("col-ext").textContent = data.cols.ext;
+    el("col-type").textContent = data.cols.type;
+    el("col-name-2").textContent = data.cols.name;
+    el("col-ext-2").textContent = data.cols.ext;
+    el("col-type-2").textContent = data.cols.type;
+    el("col-name-3").textContent = data.cols.name;
+    el("col-ext-3").textContent = data.cols.ext;
+    el("col-type-3").textContent = data.cols.type;
+
+    el("tools-c-pane-title").textContent = data.toolsCPaneTitle;
+    el("tools-d-pane-title").textContent = data.toolsDPaneTitle;
+    el("donate-pane-title").textContent = data.donatePaneTitle;
+
+    el("hero-title").textContent = data.heroTitle;
+
+    el("readme-text").textContent = data.readme;
+
+    el("footer-thanks").textContent = data.footerThanks;
+    el("footer-copy").innerHTML = data.footerCopy;
+  }
+
+  function renderAll(){
+    renderStatic();
+    renderTools();
+    renderDonateList();
+    renderPreview();
+    updateHotbar();
+    updateLangButtons();
+  }
+
+  function setLang(lang){
+    if(!translations[lang]) return;
+    currentLang = lang;
+    renderAll();
+  }
+
+  function runBoot(){
+    if(prefersReducedMotion()) return;
+    var overlay = el("boot-overlay");
+    var linesEl = el("boot-lines");
+    overlay.hidden = false;
+    var lines = d().boot;
+    var i = 0;
+    function next(){
+      if(i < lines.length){
+        var p = document.createElement("div");
+        p.textContent = lines[i];
+        linesEl.appendChild(p);
+        i++;
+        setTimeout(next, lines[i - 1] === "" ? 110 : 170);
+      } else {
+        setTimeout(function(){
+          overlay.classList.add("boot-hide");
+          setTimeout(function(){ overlay.remove(); }, 550);
+        }, 450);
+      }
+    }
+    next();
+  }
+
+  function bindHotbar(){
+    document.querySelectorAll(".hotkey").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        handleHotkey(btn.getAttribute("data-hotkey"));
+      });
+    });
+  }
+
+  function handleHotkey(action){
+    if(action === "help") scrollToReadme();
+    else if(action === "primary") primaryAction();
+    else if(action === "lang") cycleLang();
+    else if(action === "top") scrollToTop();
+  }
+
+  function bindLangSwitch(){
+    document.querySelectorAll(".lang-btn").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        setLang(btn.getAttribute("data-lang"));
+      });
+    });
+  }
+
+  function bindKeyboard(){
+    window.addEventListener("keydown", function(e){
+      var map = { F1: "help", F5: "primary", F9: "lang", F10: "top" };
+      if(map[e.key]){
+        e.preventDefault();
+        handleHotkey(map[e.key]);
+      }
+    });
+  }
+
+  function bindModal(){
+    var modal = el("qr-modal");
+    var closeBtn = el("qr-modal-close");
+
+    // Close when clicking X
+    closeBtn.addEventListener("click", function(){
+      modal.style.display = "none";
+    });
+
+    // Close when clicking outside the modal
+    modal.addEventListener("click", function(e){
+      if(e.target === modal){
+        modal.style.display = "none";
+      }
+    });
+
+    // Close with Escape key
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape" && modal.style.display === "block"){
+        modal.style.display = "none";
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    renderAll();
+    bindLangSwitch();
+    bindHotbar();
+    bindKeyboard();
+    bindModal();
+    runBoot();
+  });
+})();
+</script>
+
+</body>
+</html>
