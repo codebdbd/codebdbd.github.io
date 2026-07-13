@@ -10,7 +10,7 @@
 <meta property="og:image" content="img/suvorov.png">
 <meta property="og:url" content="https://suvorov.pp.ua/">
 <meta name="twitter:card" content="summary">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📁</text></svg>">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <title>Codebdbd — Поддержать разработку</title>
 <link rel="preload" href="fonts/JetBrainsMono-400_latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/JetBrainsMono-400_cyrillic.woff2" as="font" type="font/woff2" crossorigin>
@@ -98,6 +98,7 @@
   }
 
   :root{
+    scroll-behavior: smooth;
     --bg:#0000AA;
     --panel:#0009C7;
     --cyan:#55FFFF;
@@ -214,6 +215,47 @@
     line-height:.95;
     letter-spacing:.02em;
     animation: wordmarkGlow 3s ease-in-out infinite;
+    position:relative;
+  }
+
+  /* Glitch layers */
+  .glitch-wrap{ position:relative; display:inline-block; }
+  .glitch-wrap::before,
+  .glitch-wrap::after{
+    content:attr(data-text);
+    position:absolute; top:0; left:0;
+    width:100%; height:100%;
+    font-family:var(--font-display);
+    font-size:clamp(52px,12vw,120px);
+    line-height:.95; letter-spacing:.02em;
+    overflow:hidden; pointer-events:none;
+    opacity:0;
+  }
+  .glitch-wrap::before{ color:#ff0040; }
+  .glitch-wrap::after{ color:#00ffff; }
+
+  .glitch-active::before{
+    opacity:.8;
+    animation: glitch-shift 0.15s steps(2) 1;
+  }
+  .glitch-active::after{
+    opacity:.8;
+    animation: glitch-shift 0.15s steps(2) 1 reverse;
+  }
+  .glitch-active{
+    animation: glitch-shake 0.15s steps(3) 1;
+  }
+
+  @keyframes glitch-shift{
+    0%{ clip-path:inset(20% 0 40% 0); transform:translateX(-4px); }
+    50%{ clip-path:inset(60% 0 10% 0); transform:translateX(4px); }
+    100%{ clip-path:inset(10% 0 70% 0); transform:translateX(-2px); }
+  }
+  @keyframes glitch-shake{
+    0%{ transform:translateX(0); }
+    33%{ transform:translateX(-3px) skewX(-1deg); }
+    66%{ transform:translateX(3px) skewX(1deg); }
+    100%{ transform:translateX(0); }
   }
   .hero h1{
     font-size:clamp(16px,2.6vw,22px);
@@ -333,6 +375,12 @@
   .btn:active{ filter:brightness(.95); }
   .btn .chevron{ font-weight:400; }
 
+  /* Pixel particles */
+  .particle{
+    position:fixed; pointer-events:none; z-index:9000;
+    width:4px; height:4px; background:var(--yellow);
+  }
+
   .feedback{
     display:inline-block; margin-left:10px; font-size:.78rem; min-height:1.2em;
   }
@@ -429,7 +477,7 @@
 <div class="wrap">
 
   <section class="hero">
-    <div class="wordmark">CODEBDBD</div>
+    <div class="wordmark glitch-wrap" data-text="CODEBDBD">CODEBDBD</div>
     <h1 id="hero-title">Поддержать разработчика</h1>
   </section>
 
@@ -530,9 +578,9 @@
       donatePaneTitle: "C:\\DONATE\\ — Выбрать способ поддержки",
       freeware: "FREEWARE",
       heroTitle: "Поддержать разработчика",
-      heroTagline: "Если мои программы оказались вам полезны, поддержите их дальнейшую разработку. Ваши донаты позволяют мне больше времени уделять исправлению ошибок, выпуску обновлений и созданию новых программ.",
+      heroTagline: "Если мои программы оказались вам полезны, поддержите их дальнейшую разработку. Ваши донаты позволяют больше времени уделять исправлению ошибок, выпуску обновлений и созданию новых программ.",
       previewLabel: "ПРОСМОТР",
-      readme: "Меня зовут Алексей. Я разрабатываю бесплатные программы для Windows: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber, Bambookee. Если мои программы оказались вам полезны, поддержите их дальнейшую разработку. Ваши донаты позволяют мне больше времени уделять исправлению ошибок, выпуску обновлений и созданию новых программ. Спасибо за поддержку! ❤️",
+      readme: "Меня зовут Алексей. Я разрабатываю бесплатные программы для Windows: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber, Bambookee. Если мои программы оказались вам полезны, поддержите их дальнейшую разработку. Ваши донаты позволяют больше времени уделять исправлению ошибок, выпуску обновлений и созданию новых программ. Спасибо за поддержку! ❤️",
       footerThanks: "Спасибо за поддержку моих программ.",
       footerCopy: "© 2026 <a href=\"https://suvorov.pp.ua/\" style=\"color: inherit; text-decoration: none;\">Codebdbd</a>",
       hotbar: { help: "Способ", lang: "Язык", top: "Наверх" },
@@ -567,9 +615,9 @@
       donatePaneTitle: "C:\\DONATE\\ — Choose support method",
       freeware: "FREEWARE",
       heroTitle: "Support the developer",
-      heroTagline: "If my software has been useful to you, support its further development. Your donations allow me to spend more time fixing bugs, releasing updates, and creating new programs.",
+      heroTagline: "If my software has been useful to you, support its further development. Your donations allow spending more time fixing bugs, releasing updates, and creating new programs.",
       previewLabel: "PREVIEW",
-      readme: "My name is Alexey. I develop free programs for Windows: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber, Bambookee. If my programs have been useful to you, please support their further development. Your donations allow me to spend more time fixing bugs, releasing updates, and creating new programs. Thank you for your support! ❤️",
+      readme: "My name is Alexey. I develop free programs for Windows: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber, Bambookee. If my programs have been useful to you, please support their further development. Your donations allow spending more time fixing bugs, releasing updates, and creating new programs. Thank you for your support! ❤️",
       footerThanks: "Thank you for supporting my software.",
       footerCopy: "© 2026 <a href=\"https://suvorov.pp.ua/\" style=\"color: inherit; text-decoration: none;\">Codebdbd</a>",
       hotbar: { help: "Method", lang: "Lang", top: "Top" },
@@ -653,6 +701,35 @@
       sel.removeAllRanges();
       sel.addRange(range);
     }catch(e){ /* no-op */ }
+  }
+
+  function burstParticles(target){
+    var rect = target.getBoundingClientRect();
+    var cx = rect.left + rect.width / 2;
+    var cy = rect.top + rect.height / 2;
+    var count = 14;
+    for(var i = 0; i < count; i++){
+      var p = document.createElement("div");
+      p.className = "particle";
+      p.style.left = cx + "px";
+      p.style.top = cy + "px";
+      var angle = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.5;
+      var dist = 40 + Math.random() * 60;
+      var dx = Math.cos(angle) * dist;
+      var dy = Math.sin(angle) * dist - 30;
+      document.body.appendChild(p);
+      (function(el, dx, dy){
+        var start = performance.now();
+        function tick(now){
+          var t = (now - start) / 500;
+          if(t >= 1){ el.remove(); return; }
+          el.style.transform = "translate(" + (dx * t) + "px," + (dy * t + 80 * t * t) + "px)";
+          el.style.opacity = 1 - t;
+          requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      })(p, dx, dy);
+    }
   }
 
   function showFeedback(msg, ok){
@@ -984,6 +1061,7 @@
     if(actionBtn){
       actionBtn.addEventListener("click", function(e){
         e.preventDefault();
+        burstParticles(actionBtn);
         primaryAction();
       });
     }
@@ -1151,7 +1229,19 @@
     bindHotbar();
     bindKeyboard();
     bindModal();
+    initGlitch();
   });
+
+  function initGlitch(){
+    var wrap = document.querySelector(".glitch-wrap");
+    if(!wrap) return;
+    function trigger(){
+      wrap.classList.add("glitch-active");
+      setTimeout(function(){ wrap.classList.remove("glitch-active"); }, 160);
+      setTimeout(trigger, 4000 + Math.random() * 6000);
+    }
+    setTimeout(trigger, 2000 + Math.random() * 3000);
+  }
 })();
 </script>
 
