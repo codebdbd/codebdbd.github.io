@@ -6,7 +6,7 @@
 <title>Codebdbd — Поддержать разработку</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0000AA;
@@ -18,7 +18,7 @@
     --ok:#66FF66;
     --err:#FF7A7A;
     --font-display:'VT323','Courier New',monospace;
-    --font-body:'IBM Plex Mono','Consolas','Courier New',monospace;
+    --font-body:'JetBrains Mono','Consolas','Courier New',monospace;
   }
 
   *{ box-sizing:border-box; }
@@ -37,15 +37,33 @@
 
   .scanlines{
     position:fixed; inset:0; pointer-events:none; z-index:50;
-    background:repeating-linear-gradient(
-      to bottom,
-      rgba(0,0,0,0.14) 0px,
-      rgba(0,0,0,0.14) 1px,
-      transparent 1px,
-      transparent 3px
-    );
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.14) 0px,
+        rgba(0,0,0,0.14) 1px,
+        transparent 1px,
+        transparent 3px
+      );
     mix-blend-mode:multiply;
     opacity:.4;
+    animation: crt-flicker 0.15s infinite;
+  }
+
+  @keyframes crt-flicker {
+    0% { opacity: 0.4; }
+    50% { opacity: 0.39; }
+    100% { opacity: 0.4; }
+  }
+
+  /* CRT vignette and curvature effect (subtle) */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 49;
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.15) 90%, rgba(0,0,0,0.2) 100%);
   }
 
   a{ color:inherit; }
@@ -97,7 +115,7 @@
   }
   @keyframes blink{ 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
   @media (prefers-reduced-motion: reduce){
-    .cursor, #boot-lines div:last-child::after{ animation:none; }
+    .cursor, #boot-lines div:last-child::after, .scanlines{ animation:none; }
   }
 
   .lang-switch{ display:flex; gap:6px; }
@@ -211,18 +229,21 @@
     border:4px double var(--cyan); background:rgba(0,0,0,0.08);
   }
   .preview-body{ padding:18px; }
-  .preview-title{ color:var(--yellow); font-weight:700; font-size:.9rem; margin:0 0 8px; text-transform:uppercase; letter-spacing:.03em;}
-  .preview-desc{ color:var(--ink); font-size:.88rem; margin:0 0 14px; }
-  .preview-note{ color:var(--muted); font-size:.78rem; margin-top:10px; }
+  .preview-title{ color:var(--yellow); font-weight:700; font-size:.9rem; margin:0; text-transform:uppercase; letter-spacing:.03em;}
+  .preview-desc-inline{ color:var(--muted); font-size:.82rem; font-weight:400; text-transform:none; letter-spacing:0; }
+  .preview-note{ color:var(--muted); font-size:.78rem; margin:0; }
+  .preview-warn{
+    background:rgba(255,255,85,.12); border:1px solid var(--yellow); border-radius:4px;
+    padding:8px 12px; margin:0; font-size:.78rem; color:var(--yellow);
+  }
   .addr-row{
     display:flex; flex-wrap:wrap; align-items:center; gap:10px;
-    background:rgba(0,0,0,.25); border:1px dashed var(--cyan); padding:10px 12px; margin-bottom:6px;
+    background:rgba(0,0,0,.25); border:1px dashed var(--cyan); padding:10px 12px; margin:0;
   }
-  .addr-label{ color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; display:block; margin-bottom:4px; }
   .addr-value{ color:var(--cyan); font-size:.86rem; word-break:break-all; }
 
   .preview-flex{ display:flex; gap:22px; flex-wrap:wrap; align-items:flex-start; }
-  .preview-main{ flex:1 1 260px; min-width:180px; }
+  .preview-main{ flex:1 1 260px; min-width:180px; display:flex; flex-direction:column; gap:10px; }
   .qr-stack{ flex:0 0 auto; display:flex; flex-direction:column; align-items:center; }
   .qr-box{
     flex:0 0 auto; width:140px; background:#fff; border:2px double var(--cyan);
@@ -439,7 +460,7 @@
   ];
   var TOOLS_D = [
     { name: "BALDGRABBER",   ext: ".EXE", url: "https://github.com/codebdbd/baldgrabber" },
-    { name: "BAMBOOKI",      ext: ".EXE", url: "https://github.com/codebdbd/aitebambookee" },
+    { name: "BAMBOKEE",      ext: ".EXE", url: "https://github.com/codebdbd/aitebambookee" },
     { name: "RAPNOTE",       ext: ".EXE", url: "https://github.com/codebdbd/rapnote" }
   ];
 
@@ -452,9 +473,9 @@
       donatePaneTitle: "C:\\DONATE\\ — Выбрать способ поддержки",
       freeware: "FREEWARE",
       heroTitle: "Поддержать разработчика",
-      heroTagline: "Если мои программы оказались вам полезны, поддержите их дальнейшую разработку. Донаты позволяют мне больше времени уделять исправлению ошибок, выпуску обновлений и созданию новых программ.",
+      heroTagline: "Если мои программы оказались вам полезны, поддержите их дальнейшую разработку. Ваши донаты позволяют мне больше времени уделять исправлению ошибок, выпуску обновлений и созданию новых программ.",
       previewLabel: "ПРОСМОТР",
-      readme: "Меня зовут Алексей. Я создаю бесплатные программы и утилиты для Windows: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber и другие инструменты. Если мои программы оказались вам полезны, поддержите их дальнейшую разработку. Донаты позволяют мне больше времени уделять исправлению ошибок, выпуску обновлений и созданию новых программ.",
+      readme: "Меня зовут Алексей. Я разрабатываю бесплатные программы для Windows: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber, Bambookee. Если мои программы оказались вам полезны, поддержите их дальнейшую разработку. Ваши донаты позволяют мне больше времени уделять исправлению ошибок, выпуску обновлений и созданию новых программ. Спасибо за поддержку! ❤️",
       footerThanks: "Спасибо за поддержку моих программ.",
       footerCopy: "© 2026 <a href=\"https://suvorov.pp.ua/\" style=\"color: inherit; text-decoration: none;\">Codebdbd</a>",
       hotbar: { help: "Помощь", lang: "Язык", top: "Наверх" },
@@ -462,17 +483,19 @@
       monoNote: "⚠ Ссылка на Банку monobank ещё не добавлена. Впишите её в переменную MONOBANK_URL в коде страницы.",
       items: {
         mono:  { name:"MONOBANK", ext:".UAH", tag:"<БАНКА>", title:"MONOBANK · UAH",
-                 desc:"Донат в украинских гривнах.", btn:"Открыть Банку monobank" },
-        usdt:  { name:"USDT_TRC20", ext:".ADDR", tag:"<КОШЕЛЁК>", title:"USDT · TRC20",
-                 desc:"USDT в сети TRON.", addrLabel:"Адрес:", note:"Отправляйте только USDT через сеть TRON (TRC20). Memo не требуется.",
+                 desc:"донат в гривнах", btn:"Открыть Банку monobank" },
+        usdt:  { name:"USDT_TRC20", ext:".ADDR", tag:"<КОШЕЛЁК>", title:"USDT (TRC20)",
+                 desc:"сеть TRON",
+                 warn:"⚠ Отправляйте ТОЛЬКО USDT через сеть TRON (TRC20). Отправка через другую сеть приведёт к потере средств. Memo не требуется.",
                  btn:"Скопировать адрес", copiedMsg:"Адрес скопирован", errorMsg:"Не удалось скопировать. Выделите адрес вручную.",
                  qrAlt:"QR-код с адресом USDT (TRC20)", qrCaption:"Наведи камеру телефона" },
-        usdt_bep20: { name:"USDT_BEP20", ext:".ADDR", tag:"<КОШЕЛЁК>", title:"USDT · BEP20",
-                 desc:"USDT в сети BNB (Binance Smart Chain).", addrLabel:"Адрес:", note:"Отправляйте только USDT через сеть BNB (BEP20).",
+        usdt_bep20: { name:"USDT_BEP20", ext:".ADDR", tag:"<КОШЕЛЁК>", title:"USDT (BEP20)",
+                 desc:"сеть Binance Smart Chain (BNB)",
+                 warn:"⚠ Отправляйте ТОЛЬКО USDT через сеть BNB (BEP20). Отправка через другую сеть приведёт к потере средств.",
                  btn:"Скопировать адрес", copiedMsg:"Адрес скопирован", errorMsg:"Не удалось скопировать. Выделите адрес вручную.",
                  qrAlt:"QR-код с адресом USDT (BEP20)", qrCaption:"Наведи камеру телефона" },
         share: { name:"SHARE", ext:".TXT", tag:"<ССЫЛКА>", title:"Поделиться",
-                 desc:"Вы можете помочь, порекомендовав мои услуги друзьям, коллегам или знакомым.",
+                 desc:"рекомендация услуг",
                  btn:"Поделиться моими услугами", fallbackMsg:"Ссылка скопирована" }
       },
       qrCaptionMono: "Наведи камеру телефона",
@@ -497,9 +520,9 @@
       donatePaneTitle: "C:\\DONATE\\ — Choose support method",
       freeware: "FREEWARE",
       heroTitle: "Support the developer",
-      heroTagline: "If my software has been useful to you, support its further development. Donations allow me to spend more time fixing bugs, releasing updates, and creating new programs.",
+      heroTagline: "If my software has been useful to you, support its further development. Your donations allow me to spend more time fixing bugs, releasing updates, and creating new programs.",
       previewLabel: "PREVIEW",
-      readme: "My name is Alexey. I create free Windows applications and utilities: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber, and other tools. If my programs have been useful to you, please support their continued development. Donations allow me to spend more time fixing bugs, releasing updates, and creating new software.",
+      readme: "My name is Alexey. I develop free programs for Windows: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber, Bambookee. If my programs have been useful to you, please support their further development. Your donations allow me to spend more time fixing bugs, releasing updates, and creating new programs. Thank you for your support! ❤️",
       footerThanks: "Thank you for supporting my software.",
       footerCopy: "© 2026 <a href=\"https://suvorov.pp.ua/\" style=\"color: inherit; text-decoration: none;\">Codebdbd</a>",
       hotbar: { help: "Help", lang: "Lang", top: "Top" },
@@ -507,17 +530,19 @@
       monoNote: "⚠ The monobank Jar link hasn't been added yet. Set the MONOBANK_URL variable in the page code.",
       items: {
         mono:  { name:"MONOBANK", ext:".UAH", tag:"<JAR>", title:"MONOBANK · UAH",
-                 desc:"Donate in Ukrainian hryvnias.", btn:"Open monobank Jar" },
-        usdt:  { name:"USDT_TRC20", ext:".ADDR", tag:"<WALLET>", title:"USDT · TRC20",
-                 desc:"USDT on the TRON network.", addrLabel:"Address:", note:"Send only USDT through the TRON network (TRC20). Memo is not required.",
+                 desc:"hryvnia donation", btn:"Open monobank Jar" },
+        usdt:  { name:"USDT_TRC20", ext:".ADDR", tag:"<WALLET>", title:"USDT (TRC20)",
+                 desc:"TRON network",
+                 warn:"⚠ Send ONLY USDT via the TRON network (TRC20). Sending via another network will result in permanent loss of funds. Memo is not required.",
                  btn:"Copy address", copiedMsg:"Address copied", errorMsg:"Copy failed. Select the address manually.",
                  qrAlt:"QR code with the USDT (TRC20) address", qrCaption:"Scan with your phone camera" },
-        usdt_bep20: { name:"USDT_BEP20", ext:".ADDR", tag:"<WALLET>", title:"USDT · BEP20",
-                 desc:"USDT on the BNB network (Binance Smart Chain).", addrLabel:"Address:", note:"Send only USDT through the BNB network (BEP20).",
+        usdt_bep20: { name:"USDT_BEP20", ext:".ADDR", tag:"<WALLET>", title:"USDT (BEP20)",
+                 desc:"Binance Smart Chain (BNB) network",
+                 warn:"⚠ Send ONLY USDT via the BNB network (BEP20). Sending via another network will result in permanent loss of funds.",
                  btn:"Copy address", copiedMsg:"Address copied", errorMsg:"Copy failed. Select the address manually.",
                  qrAlt:"QR code with the USDT (BEP20) address", qrCaption:"Scan with your phone camera" },
         share: { name:"SHARE", ext:".TXT", tag:"<LINK>", title:"Share",
-                 desc:"You can also help by recommending my services to friends, colleagues, or acquaintances.",
+                 desc:"recommend services",
                  btn:"Share my services", fallbackMsg:"Link copied" }
       },
       qrCaptionMono: "Scan with your phone camera",
@@ -542,9 +567,9 @@
       donatePaneTitle: "C:\\DONATE\\ — Вибрати спосіб підтримки",
       freeware: "FREEWARE",
       heroTitle: "Підтримати розробника",
-      heroTagline: "Якщо мої програми стали вам у пригоді, підтримайте їх подальшу розробку. Донати дають змогу більше часу приділяти виправленню помилок, випуску оновлень і створенню нових програм.",
+      heroTagline: "Якщо мої програми стали вам у пригоді, підтримайте їх подальшу розробку. Ваші донати дають змогу більше часу приділяти виправленню помилок, випуску оновлень і створенню нових програм.",
       previewLabel: "ПЕРЕГЛЯД",
-      readme: "Мене звати Олексій. Я створюю безкоштовні програми та утиліти для Windows: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber та інші інструменти. Якщо мої програми стали вам у пригоді, підтримайте їх подальшу розробку. Донати дають змогу більше часу приділяти виправленню помилок, випуску оновлень і створенню нових програм.",
+      readme: "Мене звати Олексій. Я розробляю безкоштовні програми для Windows: AiteCommander, AiteBar, AiteProfiles, RapNote, BaldGrabber, Bambookee. Якщо мої програми стали вам у пригоді, підтримайте їх подальшу розробку. Ваші донати дають змогу більше часу приділяти виправленню помилок, випуску оновлень і створенню нових програм. Дякую за підтримку! ❤️",
       footerThanks: "Дякую за підтримку моїх програм.",
       footerCopy: "© 2026 <a href=\"https://suvorov.pp.ua/\" style=\"color: inherit; text-decoration: none;\">Codebdbd</a>",
       hotbar: { help: "Довідка", lang: "Мова", top: "Вгору" },
@@ -552,17 +577,19 @@
       monoNote: "⚠ Посилання на Банку monobank ще не додано. Впишіть його у змінну MONOBANK_URL у коді сторінки.",
       items: {
         mono:  { name:"MONOBANK", ext:".UAH", tag:"<БАНКА>", title:"MONOBANK · UAH",
-                 desc:"Донат в українських гривнях.", btn:"Відкрити Банку monobank" },
-        usdt:  { name:"USDT_TRC20", ext:".ADDR", tag:"<ГАМАНЕЦЬ>", title:"USDT · TRC20",
-                 desc:"USDT у мережі TRON.", addrLabel:"Адреса:", note:"Надсилайте лише USDT через мережу TRON (TRC20). Memo не потрібен.",
+                 desc:"донат у гривнях", btn:"Відкрити Банку monobank" },
+        usdt:  { name:"USDT_TRC20", ext:".ADDR", tag:"<ГАМАНЕЦЬ>", title:"USDT (TRC20)",
+                 desc:"мережа TRON",
+                 warn:"⚠ Надсилайте ТІЛЬКИ USDT через мережу TRON (TRC20). Надсилання через іншу мережу призведе до безповоротної втрати коштів. Memo не потрібен.",
                  btn:"Скопіювати адресу", copiedMsg:"Адресу скопійовано", errorMsg:"Не вдалося скопіювати. Виділіть адресу вручну.",
                  qrAlt:"QR-код з адресою USDT (TRC20)", qrCaption:"Наведи камеру телефону" },
-        usdt_bep20: { name:"USDT_BEP20", ext:".ADDR", tag:"<ГАМАНЕЦЬ>", title:"USDT · BEP20",
-                 desc:"USDT у мережі BNB (Binance Smart Chain).", addrLabel:"Адреса:", note:"Надсилайте лише USDT через мережу BNB (BEP20).",
+        usdt_bep20: { name:"USDT_BEP20", ext:".ADDR", tag:"<ГАМАНЕЦЬ>", title:"USDT (BEP20)",
+                 desc:"мережа Binance Smart Chain (BNB)",
+                 warn:"⚠ Надсилайте ТІЛЬКИ USDT через мережу BNB (BEP20). Надсилання через іншу мережу призведе до безповоротної втрати коштів.",
                  btn:"Скопіювати адресу", copiedMsg:"Адресу скопійовано", errorMsg:"Не вдалося скопіювати. Виділіть адресу вручну.",
                  qrAlt:"QR-код з адресою USDT (BEP20)", qrCaption:"Наведи камеру телефону" },
         share: { name:"SHARE", ext:".TXT", tag:"<ПОСИЛАННЯ>", title:"Поділитися",
-                 desc:"Ви можете допомогти, порадивши мої послуги друзям, колегам або знайомим.",
+                 desc:"рекомендація послуг",
                  btn:"Поділитися моїми послугами", fallbackMsg:"Посилання скопійовано" }
       },
       qrCaptionMono: "Наведи камеру телефону",
@@ -724,10 +751,18 @@
       row.className = "pane-row" + (id === selectedId ? " selected" : "");
       row.setAttribute("role", "listitem");
       row.setAttribute("aria-pressed", id === selectedId ? "true" : "false");
-      row.innerHTML =
-        '<span class="col-name">' + item.name + '</span>' +
-        '<span class="col-ext">' + item.ext + '</span>' +
-        '<span class="col-tag">' + item.tag + '</span>';
+      var nameSpan = document.createElement("span");
+      nameSpan.className = "col-name";
+      nameSpan.textContent = item.name;
+      var extSpan = document.createElement("span");
+      extSpan.className = "col-ext";
+      extSpan.textContent = item.ext;
+      var tagSpan = document.createElement("span");
+      tagSpan.className = "col-tag";
+      tagSpan.textContent = item.tag;
+      row.appendChild(nameSpan);
+      row.appendChild(extSpan);
+      row.appendChild(tagSpan);
       row.addEventListener("click", function(){
         selectedId = id;
         renderDonateList();
@@ -745,8 +780,7 @@
     el("preview-filename").textContent = item.name + item.ext;
 
     var body = el("preview-body");
-    var main = '<p class="preview-title">' + item.title + '</p>';
-    main += '<p class="preview-desc">' + item.desc + '</p>';
+    var main = '<p class="preview-title">' + item.title + ' <span class="preview-desc-inline">' + item.desc + '</span></p>';
     var qr = "";
 
     if(selectedId === "mono"){
@@ -756,20 +790,18 @@
            '<div class="qr-box"><img src="' + MONOBANK_QR + '" alt="' + data.qrAltMono + '"></div>' +
            '<div class="qr-hint">' + data.qrHint + '</div></div>';
     } else if(selectedId === "usdt"){
-      main += '<span class="addr-label">' + item.addrLabel + '</span>' +
-              '<div class="addr-row"><span class="addr-value" id="usdt-address-value">' + USDT_ADDRESS + '</span></div>';
+      main += '<div class="addr-row"><span class="addr-value" id="usdt-address-value">' + USDT_ADDRESS + '</span></div>';
       main += '<div><button class="btn" id="action-btn">' + item.btn + '</button>' +
               '<span class="feedback" id="preview-feedback" aria-live="polite"></span></div>';
-      main += '<p class="preview-note">' + item.note + '</p>';
+      main += '<p class="preview-warn">' + item.warn + '</p>';
       qr = '<div class="qr-stack"><div class="qr-caption">' + item.qrCaption + '</div>' +
            '<div class="qr-box"><img src="' + USDT_QR + '" alt="' + item.qrAlt + '"></div>' +
            '<div class="qr-hint">' + data.qrHint + '</div></div>';
     } else if(selectedId === "usdt_bep20"){
-      main += '<span class="addr-label">' + item.addrLabel + '</span>' +
-              '<div class="addr-row"><span class="addr-value" id="usdt-bep20-address-value">' + USDT_BEP20_ADDRESS + '</span></div>';
+      main += '<div class="addr-row"><span class="addr-value" id="usdt-bep20-address-value">' + USDT_BEP20_ADDRESS + '</span></div>';
       main += '<div><button class="btn" id="action-btn">' + item.btn + '</button>' +
               '<span class="feedback" id="preview-feedback" aria-live="polite"></span></div>';
-      main += '<p class="preview-note">' + item.note + '</p>';
+      main += '<p class="preview-warn">' + item.warn + '</p>';
       qr = '<div class="qr-stack"><div class="qr-caption">' + item.qrCaption + '</div>' +
            '<div class="qr-box"><img src="' + BEP20_QR + '" alt="' + item.qrAlt + '"></div>' +
            '<div class="qr-hint">' + data.qrHint + '</div></div>';
