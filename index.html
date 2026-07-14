@@ -418,11 +418,7 @@
   .qr-modal {
     position: fixed;
     z-index: 9999;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    inset: 0;
     background-color: rgba(0,0,0,0.9);
     display: flex;
     align-items: center;
@@ -435,7 +431,7 @@
     box-sizing: border-box;
     padding: 16px;
     border: 4px double var(--cyan);
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 12px;
