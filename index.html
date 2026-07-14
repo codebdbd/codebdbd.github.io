@@ -463,9 +463,8 @@
   .qr-modal-img {
     display: block;
     box-sizing: border-box;
-    width: auto;
+    width: 100%;
     height: auto;
-    max-width: 100%;
     max-height: 65vh;
     object-fit: contain;
     background: #fff;
@@ -479,11 +478,11 @@
       padding:10px;
       max-height:90vh;
     }
-    .qr-modal-img{ max-width:100%; max-height:70vh; }
+    .qr-modal-img{ max-height:70vh; }
   }
 
   @media (max-width:768px){
-    .qr-modal-img{ max-width:100%; max-height:65vh; }
+    .qr-modal-img{ max-height:65vh; }
   }
 
 </style>
