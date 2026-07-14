@@ -420,8 +420,8 @@
     z-index: 9999;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     overflow: hidden;
     background-color: rgba(0,0,0,0.9);
     display: flex;
@@ -432,11 +432,13 @@
   .qr-modal-content {
     position: relative;
     background-color: var(--bg);
+    box-sizing: border-box;
     padding: 16px;
     border: 4px double var(--cyan);
     width: 90vw;
     max-width: 500px;
-    max-height: 80vh;
+    max-height: 85vh;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -460,9 +462,10 @@
 
   .qr-modal-img {
     display: block;
-    width: 100%;
-    max-width: 350px;
+    box-sizing: border-box;
+    width: auto;
     height: auto;
+    max-width: 100%;
     max-height: 65vh;
     object-fit: contain;
     background: #fff;
@@ -471,14 +474,16 @@
 
   @media (max-width:480px){
     .qr-modal-content{
-      width:95vw;
-      padding:12px;
+      width:92vw;
+      max-width:none;
+      padding:10px;
+      max-height:90vh;
     }
-    .qr-modal-img{ max-width:80vw; max-height:60vh; }
+    .qr-modal-img{ max-width:100%; max-height:70vh; }
   }
 
   @media (max-width:768px){
-    .qr-modal-img{ max-width:70vw; max-height:55vh; }
+    .qr-modal-img{ max-width:100%; max-height:65vh; }
   }
 
 </style>
