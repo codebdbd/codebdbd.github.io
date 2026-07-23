@@ -568,12 +568,15 @@
   var TOOLS_C = [
     { name: "AITECOMMANDER", ext: ".EXE", url: "https://github.com/codebdbd/aitecommander" },
     { name: "AITEBAR",       ext: ".EXE", url: "https://github.com/codebdbd/aitebar" },
-    { name: "AITEPROFILES",  ext: ".EXE", url: "https://github.com/codebdbd/aiteprofiles" }
+    { name: "AITEPROFILES",  ext: ".EXE", url: "https://github.com/codebdbd/aiteprofiles" },
+    { name: "BALDGRABBER",   ext: ".EXE", url: "https://github.com/codebdbd/baldgrabber" },
+    { name: "RAPNOTE",       ext: ".EXE", url: "https://github.com/codebdbd/rapnote" }
   ];
   var TOOLS_D = [
-    { name: "BALDGRABBER",   ext: ".EXE", url: "https://github.com/codebdbd/baldgrabber" },
-    { name: "BAMBOKEE",      ext: ".EXE", url: "https://github.com/codebdbd/aitebambookee" },
-    { name: "RAPNOTE",       ext: ".EXE", url: "https://github.com/codebdbd/rapnote" }
+    { name: "BORSCH",        ext: ".HTML", url: "https://suvorov.pp.ua/borsch/" },
+    { name: "UICONTROLATLAS",ext: ".HTML", url: "https://suvorov.pp.ua/atlas/" },
+    { name: "PED",           ext: ".HTML", url: "https://suvorov.pp.ua/prompt/" },
+    { name: "AZOV",          ext: ".HTML", url: "https://suvorov.pp.ua/azov/" }
   ];
 
   var translations = {
@@ -1188,7 +1191,7 @@
 
     function openModal(){
       lastFocused = document.activeElement;
-      modal.style.display = "block";
+      modal.style.display = "flex";
       closeBtn.focus();
     }
 
